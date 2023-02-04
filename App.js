@@ -1,32 +1,42 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, ScrollView, FlatList } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, FlatList } from 'react-native';
 import { useState, useEffect } from 'react'
+import Header from './components/Header';
+import { TodoItem } from './components/TodoItem';
+import { AddTodo } from './components/AddTodo';
 
 export default function App() {
-  const [first, setfirst] = useState('wahid')
-  const people = [
-    {title: "hello world", id:1},
-    {title: "hello world", id:2},
-    {title: "hello world", id:3},
-    {title: "hello world", id:4},
-    {title: "hello world", id:5},
-    {title: "hello world", id:6},
-    {title: "hello world", id:7},
-    {title: "hello world", id:8},
-    {title: "hello world", id:9},
-  ]
+  const [todos, setTodos] = useState([
+    {name: "hello world", id:1},
+    {name: "hello world", id:2},
+    {name: "hello world", id:3},
+    {name: "hello world", id:4},
+    {name: "hello world", id:5},
+  ])
+
+  const pressHandler = (id) => {
+    setTodos((prevTodos)=> {
+      return prevTodos.filter(todo => todo.id !== id)
+    })
+  }
+
+  const submitHandler = (text) => {
+    setTodos((prevTodos)=>{
+     return [{name: text, id: Math.random().toString()} , ...todos]
+    })
+  }
   return (
     <View style={styles.container}>
-      <Text>Hello</Text>
-      <FlatList
-        data={people}
-        renderItem={({ item }) => 
-          <Text style={styles.list}>{item.title}</Text>
-        }
-      />
-      <Text>Hello</Text>
-     
-      <StatusBar style="auto" />
+      <Header />
+      <View style={styles.content}>
+        <AddTodo submitHandler={submitHandler}/>
+        <View style={styles.list}>
+          <FlatList data={todos} renderItem={({ item }) => {
+            return <TodoItem item={item} pressHandler={pressHandler}/>
+          }}/>
+        </View>
+      </View>
+      {/* <StatusBar style="auto" /> */}
     </View>
   );
 }
@@ -35,13 +45,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    paddingTop: 20,
-    paddingHorizontal: 20
   },
- list: {
-   padding: 20,
-   marginTop: 24,
-   backgroundColor: 'pink',
-   fontSize: 24,
- }
+  content: {
+    padding: 40
+  },
+  list: {
+    marginTop: 20
+  }
 });
