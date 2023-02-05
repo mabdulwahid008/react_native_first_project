@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, TouchableOpacity, FlatList } from 'react-native';
+import { StyleSheet, Text, View, Alert, FlatList } from 'react-native';
 import { useState, useEffect } from 'react'
 import Header from './components/Header';
 import { TodoItem } from './components/TodoItem';
@@ -21,20 +21,31 @@ export default function App() {
   }
 
   const submitHandler = (text) => {
-    setTodos((prevTodos)=>{
-     return [{name: text, id: Math.random().toString()} , ...todos]
-    })
+    if(text.length > 3){
+        setTodos((prevTodos)=>{
+        return [{name: text, id: Math.random().toString()} , ...prevTodos]
+        })
+    }
+    else
+      Alert.alert('Oops!', 'Todo must be greater than 3 chars', [
+      {text: 'Understood', onPress: ()=>{}}
+    ])
   }
   return (
     <View style={styles.container}>
+
       <Header />
+
       <View style={styles.content}>
-        <AddTodo submitHandler={submitHandler}/>
-        <View style={styles.list}>
-          <FlatList data={todos} renderItem={({ item }) => {
-            return <TodoItem item={item} pressHandler={pressHandler}/>
-          }}/>
-        </View>
+
+          <AddTodo submitHandler={submitHandler}/>
+
+          <View style={styles.list}>
+            <FlatList data={todos} renderItem={({ item }) => {
+              return <TodoItem item={item} pressHandler={pressHandler}/>
+            }}/>
+          </View>
+
       </View>
       {/* <StatusBar style="auto" /> */}
     </View>
