@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Alert, FlatList } from 'react-native';
+import { StyleSheet, Text, View, Alert, FlatList, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import { useState, useEffect } from 'react'
 import Header from './components/Header';
 import { TodoItem } from './components/TodoItem';
@@ -32,23 +32,25 @@ export default function App() {
     ])
   }
   return (
-    <View style={styles.container}>
+    <TouchableWithoutFeedback onPress={()=> Keyboard.dismiss()}>
+      <View style={styles.container}>
 
-      <Header />
+        <Header />
 
-      <View style={styles.content}>
+        <View style={styles.content}>
 
-          <AddTodo submitHandler={submitHandler}/>
+            <AddTodo submitHandler={submitHandler}/>
 
-          <View style={styles.list}>
-            <FlatList data={todos} renderItem={({ item }) => {
-              return <TodoItem item={item} pressHandler={pressHandler}/>
-            }}/>
-          </View>
+            <View style={styles.list}>
+              <FlatList data={todos} renderItem={({ item }) => {
+                return <TodoItem item={item} pressHandler={pressHandler}/>
+              }}/>
+            </View>
 
+        </View>
+        {/* <StatusBar style="auto" /> */}
       </View>
-      {/* <StatusBar style="auto" /> */}
-    </View>
+    </TouchableWithoutFeedback>
   );
 }
 
@@ -58,9 +60,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   content: {
+    flex: 1,
     padding: 40
   },
   list: {
+    flex: 1,
     marginTop: 20
   }
 });
